@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "api-movies"
+  namespace: "default"
+  labels:
+    app: "api-movies"
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: "api-movies"
+  template:
+    metadata:
+      labels:
+        app: "api-movies"
+    spec:
+      containers:
+      - name: "api-movies"
+        image: "julianv08/api-movies:1.0.0"
+        ports:
+          - name: http-server
+            containerPort: 5000
+        env:
+          - name: SQLALCHEMY_DATABASE_URI
+            value: postgresql://jdvalencir:jdvalencir12@postgres:5432/movies_db
+          - name: SQLALCHEMY_TRACK_MODIFICATIONS
+            value: "false"
+          - name: SHOW_SQLALCHEMY_LOG_MESSAGES
+            value: "false"
+          - name: ERROR_404_HELP
+            value: "false"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
